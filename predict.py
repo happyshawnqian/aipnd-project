@@ -27,6 +27,8 @@ model = mc.load_checkpoint(args.checkpoint)
 
 # define inputs
 img_dir = args.input
+img_dir = eval(repr(img_dir).replace('\\', '/'))
+img_dir.replace('//','/')
 cat = img_dir.split('/')[-2]
 dp.imshow(dp.process_image(img_dir))
 plt.title(cat_to_name[cat])
