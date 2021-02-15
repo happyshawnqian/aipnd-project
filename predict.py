@@ -14,6 +14,7 @@ import seaborn as sb
 parser = argparse.ArgumentParser()
 parser.add_argument('input', type=str)
 parser.add_argument('checkpoint', type=str)
+parser.add_argument('--top_k', dest = 'top_k', type=int, default=5)
 
 args = parser.parse_args()
 
@@ -32,9 +33,11 @@ plt.title(cat_to_name[cat])
 plt.axis('off')
 
 # predict
-probs, classes = mc.predict(img_dir, model, topk=5)
+probs, cats = mc.predict(img_dir, model, topk=args.top_k)
 print('prob: {}'.format(probs))
-print('classes: {}'.format(classes))
+print('labels: {}'.format(cats))
+
+classes = [cat_to_name[cat] for cat in cats]
 
 img = Image.open(img_dir).convert('RGB')
 img_transform = transforms.Compose([transforms.Resize(256), transforms.CenterCrop(224)])
@@ -50,3 +53,4 @@ plt.subplot(2, 1, 2)
 sb.barplot(x = probs, y = classes, color = 'pink')
 plt.xlabel('')
 plt.ylabel('')
+#plt.show()
